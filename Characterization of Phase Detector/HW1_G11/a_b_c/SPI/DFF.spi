@@ -1,0 +1,76 @@
+************************************************************************
+* auCdl Netlist:
+* 
+* Library Name:  hw1
+* Top Cell Name: DFF
+* View Name:     schematic
+* Netlisted on:  Apr  1 20:36:54 2021
+************************************************************************
+
+*.BIPOLAR
+*.RESI = 2000 
+*.RESVAL
+*.CAPVAL
+*.DIOPERI
+*.DIOAREA
+*.EQUATION
+*.SCALE METER
+*.MEGA
+.PARAM
+
+
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    inv
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT inv in nb out pb vdd vss
+*.PININFO in:I nb:I pb:I vdd:I vss:I out:O
+MM1 out in vdd pb P_18 W=pw L=pl m=pm
+MM0 out in vss nb N_18 W=nw L=nl m=nm
+.ENDS
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    tg
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT tg in nb ng out pb pg
+*.PININFO nb:I ng:I pb:I pg:I in:B out:B
+MM1 in pg out pb P_18 W=pw L=pl m=pm
+MM0 in ng out nb N_18 W=nw L=nl m=nm
+.ENDS
+
+************************************************************************
+* Library Name: hw1
+* Cell Name:    DFF
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT DFF clk in out vdd vss
+*.PININFO clk:I in:I vdd:I vss:I out:O
+XI20 net058 vss out vdd vdd vss / inv nm=8 nl=1.8e-07 nw=2.5e-07 pm=8 
++ pl=1.8e-07 pw=2.5e-07
+XI19 clk vss clkb vdd vdd vss / inv nm=2 nl=1.8e-07 nw=2.5e-07 pm=2 pl=1.8e-07 
++ pw=2.5e-07
+XI16 net76 vss net058 vdd vdd vss / inv nm=4 nl=1.8e-07 nw=2.5e-07 pm=4 
++ pl=1.8e-07 pw=2.5e-07
+XI15 net058 vss net70 vdd vdd vss / inv nm=2 nl=1.8e-07 nw=2.5e-07 pm=2 
++ pl=1.8e-07 pw=2.5e-07
+XI14 net64 vss net88 vdd vdd vss / inv nm=1 nl=1.8e-07 nw=2.5e-07 pm=1 
++ pl=1.8e-07 pw=2.5e-07
+XI13 net82 vss net64 vdd vdd vss / inv nm=2 nl=1.8e-07 nw=2.5e-07 pm=2 
++ pl=1.8e-07 pw=2.5e-07
+XI17 net64 vss clk net76 vdd clkb / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI11 in vss clkb net82 vdd clk / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI12 net88 vss clk net82 vdd clkb / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI18 net70 vss clkb net76 vdd clk / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+.ENDS
+

@@ -1,0 +1,128 @@
+************************************************************************
+* auCdl Netlist:
+* 
+* Library Name:  hw1
+* Top Cell Name: PD3
+* View Name:     schematic
+* Netlisted on:  Apr  6 20:26:55 2021
+************************************************************************
+
+*.BIPOLAR
+*.RESI = 2000 
+*.RESVAL
+*.CAPVAL
+*.DIOPERI
+*.DIOAREA
+*.EQUATION
+*.SCALE METER
+*.MEGA
+.PARAM
+
+
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    inv
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT inv in nb out pb vdd vss
+*.PININFO in:I nb:I pb:I vdd:I vss:I out:O
+MM1 out in vdd pb P_18 W=pw L=pl m=pm
+MM0 out in vss nb N_18 W=nw L=nl m=nm
+.ENDS
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    nor2
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT nor2 A B nb out pb vdd vss
+*.PININFO A:I B:I nb:I pb:I vdd:I vss:I out:O
+MM0 out A net11 pb P_18 W=pw L=pl m=pm
+MM1 net11 B vdd pb P_18 W=pw L=pl m=pm
+MM2 out A vss nb N_18 W=nw L=nl m=nm
+MM3 out B vss nb N_18 W=nw L=nl m=nm
+.ENDS
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    tg
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT tg in nb ng out pb pg
+*.PININFO nb:I ng:I pb:I pg:I in:B out:B
+MM1 in pg out pb P_18 W=pw L=pl m=pm
+MM0 in ng out nb N_18 W=nw L=nl m=nm
+.ENDS
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    DFF_reset
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT DFF_reset clk in out reset vdd vss
+*.PININFO clk:I in:I reset:I vdd:I vss:I out:O
+XI4 net38 reset vss net19 vdd vdd vss / nor2 nm=1 nl=0.18u nw=0.5u pm=1 
++ pl=0.18u pw=0.5u
+XI18 net13 vss clkb net32 vdd clk / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI12 net19 vss clk net26 vdd clkb / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI11 in vss clkb net26 vdd clk / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI17 net38 vss clk net32 vdd clkb / tg nm=1 nl=0.18u nw=0.25u pm=1 pl=0.18u 
++ pw=0.25u
+XI13 net26 vss net38 vdd vdd vss / inv nm=2 nl=1.8e-07 nw=2.5e-07 pm=2 
++ pl=1.8e-07 pw=2.5e-07
+XI2 out vss net13 vdd vdd vss / inv nm=2 nl=1.8e-07 nw=2.5e-07 pm=2 pl=1.8e-07 
++ pw=2.5e-07
+XI16 net32 vss out vdd vdd vss / inv nm=4 nl=1.8e-07 nw=2.5e-07 pm=4 
++ pl=1.8e-07 pw=2.5e-07
+XI19 clk vss clkb vdd vdd vss / inv nm=2 nl=1.8e-07 nw=2.5e-07 pm=2 pl=1.8e-07 
++ pw=2.5e-07
+.ENDS
+
+************************************************************************
+* Library Name: basic_cell
+* Cell Name:    nand2
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT nand2 A B nb out pb vdd vss
+*.PININFO A:I B:I nb:I pb:I vdd:I vss:I out:O
+MM3 net08 B vss nb N_18 W=nw L=nl m=nm
+MM2 out A net08 nb N_18 W=nw L=nl m=nm
+MM1 out B vdd pb P_18 W=pw L=pl m=pm
+MM0 out A vdd pb P_18 W=pw L=pl m=pm
+.ENDS
+
+************************************************************************
+* Library Name: hw1
+* Cell Name:    PD3
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT PD3 N0 FB clk enable out vdd vss
+*.PININFO N0:I FB:I clk:I enable:I vdd:I vss:I out:O
+XI12 out_b vss out vdd vdd vss / inv nm=4 nl=1.8e-07 nw=2.5e-07 pm=4 
++ pl=1.8e-07 pw=2.5e-07
+XI9 clk N0 B reset vdd vss / DFF_reset
+XI8 FB N0 A reset vdd vss / DFF_reset
+XI10 reset_signal enable vss reset vdd vdd vss / nand2 pm=1 pl=0.18u pw=0.5u 
++ nm=1 nl=0.18u nw=0.5u
+XI7 r out_b vss dummy_2 vdd vdd vss / nand2 pm=4 pl=0.18u pw=0.5u nm=4 
++ nl=0.18u nw=0.5u
+XI6 s dummy_2 vss out_b vdd vdd vss / nand2 pm=4 pl=0.18u pw=0.5u nm=4 
++ nl=0.18u nw=0.5u
+XI5 s B vss r vdd vdd vss / nand2 pm=2 pl=0.18u pw=0.5u nm=2 nl=0.18u nw=0.5u
+XI4 r A vss s vdd vdd vss / nand2 pm=2 pl=0.18u pw=0.5u nm=2 nl=0.18u nw=0.5u
+XI3 B A vss dummy vdd vdd vss / nand2 pm=1 pl=0.18u pw=0.5u nm=1 nl=0.18u 
++ nw=0.5u
+XI2 A B vss reset_signal vdd vdd vss / nand2 pm=1 pl=0.18u pw=0.5u nm=1 
++ nl=0.18u nw=0.5u
+.ENDS
+

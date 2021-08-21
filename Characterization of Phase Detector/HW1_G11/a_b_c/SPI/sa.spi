@@ -1,0 +1,41 @@
+************************************************************************
+* auCdl Netlist:
+* 
+* Library Name:  hw1
+* Top Cell Name: sa
+* View Name:     schematic
+* Netlisted on:  Apr  1 20:37:09 2021
+************************************************************************
+
+*.BIPOLAR
+*.RESI = 2000 
+*.RESVAL
+*.CAPVAL
+*.DIOPERI
+*.DIOAREA
+*.EQUATION
+*.SCALE METER
+*.MEGA
+.PARAM
+
+
+
+************************************************************************
+* Library Name: hw1
+* Cell Name:    sa
+* View Name:    schematic
+************************************************************************
+
+.SUBCKT sa FB clk_in down up vdd vss
+*.PININFO FB:I clk_in:I vdd:I vss:I down:O up:O
+MM6 net21 clk_in vss vss N_18 W=1u L=190.00n m=1
+MM5 net14 clk_in net21 vss N_18 W=500.0n L=190.00n m=1
+MM4 net18 FB net21 vss N_18 W=500.0n L=190.00n m=1
+MM3 down up net18 vss N_18 W=500.0n L=190.00n m=1
+MM2 up down net14 vss N_18 W=500.0n L=190.00n m=1
+MM8 down clk_in vdd vdd P_18 W=500.0n L=190.00n m=1
+MM7 up clk_in vdd vdd P_18 W=500.0n L=190.00n m=1
+MM1 vdd up down vdd P_18 W=250.00n L=190.00n m=1
+MM0 up down vdd vdd P_18 W=250.00n L=190.00n m=1
+.ENDS
+
